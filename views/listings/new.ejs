@@ -1,26 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AWanderlust</title>
-</head>
-<body>
+<%layout("/layouts/boilerplate.ejs")  %>
+<div class="row">
+<div class="col-8 offset-2">
     <h3> Create a new Listing</h3>
     <form method="post" action="/listings">
-        <input name=listing[title] placeholder="enter title"/>
-        <br/><br/>
-        <textarea name=listing[description] placeholder="description"></textarea>
-        <br/><br/>
-        <input name=listing[image] placeholder="enter image/URL link" type="text">
-        <br/><br/>
-        <input name=listing[price] placeholder="Enter your price" type="number">
-        <br/><br/>
-        <input name=listing[location] placeholder="enter your location" type="text">
-        <br/><br/>
-        <input name=listing[country] placeholder="enter country name">
-        <br/><br/>
-        <button>Add</button>
-    </form>
-</body>
-</html>
+<div class="mb-3">
+<label for="title" class="form-label">Title</label>
+<input name=listing[title]
+class="form-control"
+placeholder="enter title"/>
+</div>
+
+<div class="mb-3">
+<label for="description" class="form-label">Description</label>
+<textarea name=listing[description]
+class="form-control"></textarea>
+</div>
+
+<div class="mb-3">
+<label for="image" class="form-label">Image</label>
+<input name=listing[image]
+placeholder="enter image/URL link" class="form-control" type="text">
+</div>
+
+<div class="mb-3">
+<label for="price" class="form-label">Price</label>
+<input name=listing[price]
+class="form-control"
+type="number">
+</div>
+<div class="row">
+<div class="mb-3 col-md-8" >
+<label for="location" class="form-label">Location</label>
+<input name=listing[location]
+placeholder="enter your location"
+type="text" class="form-control">
+</div>
+
+<div class="mb-3 col-md-4">
+<label for="country" class="form-label">Country</label>
+<input name=listing[country]
+placeholder="enter country name" class="form-control">
+</div>
+</div>
+
+<button class="btn btn-dark">Add</button>
+</form>
+</div>
+</div>
