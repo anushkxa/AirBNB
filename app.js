@@ -5,6 +5,7 @@ const ejsMate= require("ejs-mate");
 const mongoose = require("mongoose");
 const Listing = require("./models/lisiting");
 const methodOverride= require("method-override");
+const multer = require("multer");
 app.use(methodOverride("_method"));
 app.engine('ejs',ejsMate);
 
@@ -12,6 +13,28 @@ app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname,"/public")));
+
+// Configure multer for image uploads
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/images/listings/');
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ 
+    storage: storage,
+    fileFilter: function (req, file, cb) {
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('Only image files are allowed!'), false);
+        }
+    }
+});
 
 async function main(){
     try {
@@ -46,11 +69,26 @@ app.get("/listings/:id", async(req,res)=>{
 
 })
 
-app.post("/listings", async (req,res)=>{
-    const newListing=new Listing(req.body.listing);
-    await newListing.save();
-    console.log(newListing);
-    res.redirect("/listings");
+app.post("/listings", upload.single('image'), async (req,res)=>{
+    try {
+        const listingData = req.body.listing;
+        
+        // If an image was uploaded, add the image information
+        if (req.file) {
+            listingData.image = {
+                filename: req.file.filename,
+                url: `/images/listings/${req.file.filename}`
+            };
+        }
+        
+        const newListing = new Listing(listingData);
+        await newListing.save();
+        console.log(newListing);
+        res.redirect("/listings");
+    } catch (error) {
+        console.error("Error creating listing:", error);
+        res.status(500).send("Error creating listing");
+    }
 });
 
 app.get("/listings/:id/edit", async(req,res)=>{
@@ -60,10 +98,25 @@ app.get("/listings/:id/edit", async(req,res)=>{
 })
 
 //update vala route
-app.put("/listings/:id", async (req,res)=>{
-    let{id}=req.params;
-    await Listing.findByIdAndUpdate(id,{...req.body.listing});
-    res.redirect(`/listings/${id}`);
+app.put("/listings/:id", upload.single('image'), async (req,res)=>{
+    try {
+        let{id}=req.params;
+        const updateData = {...req.body.listing};
+        
+        // If a new image was uploaded, update the image information
+        if (req.file) {
+            updateData.image = {
+                filename: req.file.filename,
+                url: `/images/listings/${req.file.filename}`
+            };
+        }
+        
+        await Listing.findByIdAndUpdate(id, updateData);
+        res.redirect(`/listings/${id}`);
+    } catch (error) {
+        console.error("Error updating listing:", error);
+        res.status(500).send("Error updating listing");
+    }
 });
 
 app.delete("/listings/:id", async(req,res)=>{

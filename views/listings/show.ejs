@@ -5,7 +5,7 @@
 
     <h3>Listing Details:</h3>
     <div class="card">
-        <img src="<%=listing.image %>>" class="card-img-top show-img" alt="listing_image">
+        <img src="<%= listing.image && listing.image.url ? listing.image.url : '/images/listings/default.jpg' %>" class="card-img-top show-img" alt="listing_image">
         <div class="card-body">
             <p class="card-text">
                 <b><%= listing.title %></b><br>

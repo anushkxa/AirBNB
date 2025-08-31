@@ -1,12 +1,17 @@
 <%layout("/layouts/boilerplate.ejs")  %>
 <body>
     <h3> Edit Your Listing</h3>
-    <form method="POST" action="/listings/<%=listing._id%>?_method=PUT">
+    <form method="POST" action="/listings/<%=listing._id%>?_method=PUT" enctype="multipart/form-data">
         <input name=listing[title] value="<%= listing.title%>"/>
         <br/><br/>
         <textarea name=listing[description]><%= listing.description%></textarea>
         <br/><br/>
-        <input name=listing[image] value="<%= listing.image.url%>"type="text">
+        <label for="image">Current Image:</label>
+        <% if (listing.image && listing.image.url) { %>
+            <img src="<%= listing.image.url %>" alt="Current image" style="max-width: 200px; display: block; margin: 10px 0;">
+        <% } %>
+        <input name="image" type="file" class="form-control" accept="image/*">
+        <small class="form-text text-muted">Upload a new image to replace the current one</small>
         <br/><br/>
         <input name=listing[price] value="<%= listing.price%>" type="number">
         <br/><br/>

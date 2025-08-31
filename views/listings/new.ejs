@@ -2,7 +2,7 @@
 <div class="row">
 <div class="col-8 offset-2">
     <h3> Create a new Listing</h3>
-    <form method="post" action="/listings">
+    <form method="post" action="/listings" enctype="multipart/form-data">
 <div class="mb-3">
 <label for="title" class="form-label">Title</label>
 <input name=listing[title]
@@ -18,8 +18,8 @@ class="form-control"></textarea>
 
 <div class="mb-3">
 <label for="image" class="form-label">Image</label>
-<input name=listing[image]
-placeholder="enter image/URL link" class="form-control" type="text">
+<input name="image" type="file" class="form-control" accept="image/*">
+<small class="form-text text-muted">Upload an image file (JPG, PNG, GIF)</small>
 </div>
 
 <div class="mb-3">
