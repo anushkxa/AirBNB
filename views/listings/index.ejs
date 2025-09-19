@@ -5,7 +5,7 @@
     <% for (let listing of allListings) { %>
       <div class="col">
         <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark listing-link">
-          <div class="card lisitng-card col h-100">
+          <div class="card listing-card col h-100">
             <img src="<%= listing.image && listing.image.url ? listing.image.url : "https://cdn.pixabay.com/photo/2022/09/27/19/46/ai-generated-7483596_960_720.jpg" %>" class="card-img-top" alt="<%=listing.title%>" style="height: 20rem; object-fit: cover;">
             <div class="card-img-overlay"></div>
             <div class="card-body">
