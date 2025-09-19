@@ -6,12 +6,12 @@
       <div class="col">
         <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark listing-link">
           <div class="card h-100">
-            <img src="<%= listing.image && listing.image.url ? listing.image.url : '/images/listings/default.jpg' %>" class="card-img-top" alt="<%=listing.title%>" style="height: 20rem; object-fit: cover;">
+            <img src="<%= listing.image && listing.image.url ? listing.image.url : "https://cdn.pixabay.com/photo/2022/09/27/19/46/ai-generated-7483596_960_720.jpg" %>" class="card-img-top" alt="<%=listing.title%>" style="height: 20rem; object-fit: cover;">
             <div class="card-img-overlay"></div>
             <div class="card-body">
               <p class="card-text mb-0">
                 <b><%= listing.title %></b><br>
-                &#8377;<%= Number(listing.price).toLocaleString("en-IN") %>/night
+                &#8377;<%= Number(listing.price).toLocaleString("en-IN")%>/night
               </p>
             </div>
           </div>
