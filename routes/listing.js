@@ -5,6 +5,7 @@ const wrapAsync=require("../utils/wrapAsync.js");
 const Listing = require("../models/lisiting")
 const ExpressError = require("../utils/expressError.js");
 const validateListing = require("../utils/validateListing.js");
+const {isLoggedIn}= require("../middleware.js");
 
 
 const storage = multer.diskStorage({
@@ -30,11 +31,7 @@ router.get("/", async (req, res) => {
     res.render("listings/index.ejs",{allListings});});
 
 //adding naya
-router.get("/new", (req,res)=>{
-    if(!req.isAuthenticated()){
-        req.flash("error", "You must be logged in to create listing!");
-        return res.redirect("/login");
-    }
+router.get("/new",isLoggedIn, (req,res)=>{
     res.render("listings/new.ejs");
 })
 
