@@ -6,6 +6,7 @@ const Listing = require("../models/lisiting")
 const ExpressError = require("../utils/expressError.js");
 const validateListing = require("../utils/validateListing.js");
 const {isLoggedIn}= require("../middleware.js");
+const { valid } = require("joi");
 
 
 const storage = multer.diskStorage({
@@ -68,8 +69,8 @@ router.post(
     })
 );
 
-
-router.get("/:id/edit", async(req,res)=>{
+//edit
+router.get("/:id/edit",isLoggedIn, async(req,res)=>{
     let {id}=req.params;
     const listing=await Listing.findById(id);
     if(!listing){
@@ -80,7 +81,7 @@ router.get("/:id/edit", async(req,res)=>{
 })
 
 //update vala route
-router.put("/:id", upload.single('image'), async (req,res)=>{
+router.put("/:id",isLoggedIn,validateListing, upload.single('image'), async (req,res)=>{
     try {
         let{id}=req.params;
         const updateData = {...req.body.listing};
@@ -101,7 +102,7 @@ router.put("/:id", upload.single('image'), async (req,res)=>{
     }
 });
 
-router.delete("/:id", async(req,res)=>{
+router.delete("/:id",isLoggedIn, async(req,res)=>{
     let {id}=req.params;
     let deletedListing=await Listing.findByIdAndDelete(id);
     console.log("deleted");
