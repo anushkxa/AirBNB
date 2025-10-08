@@ -27,7 +27,7 @@ router.get("/login",(req,res)=>{
 
 router.post("/login",
     passport.authenticate("local",
-        {failureRedirect: "/login", 
+        {failureRedirect: "/login",
         failureFlash: true
     })
     ,async(req,res)=>{
