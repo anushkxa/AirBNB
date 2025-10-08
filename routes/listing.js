@@ -39,7 +39,7 @@ router.get("/new",isLoggedIn, (req,res)=>{
 //will show  all info of specific hotel hheehe
 router.get("/:id", async(req,res)=>{
     let {id}= req.params;
-    const listing=await Listing.findById(id).populate("reviews");
+    const listing=await Listing.findById(id).populate("reviews").populate("owner");
     if(!listing){
         req.flash("error","Listing you requested for does not exist");
         return res.redirect("/listings");
@@ -50,6 +50,7 @@ router.get("/:id", async(req,res)=>{
 
 router.post(
     "/",
+    isLoggedIn,
     upload.single("image"),
     validateListing,
     wrapAsync(async (req, res, next) => {
@@ -61,8 +62,8 @@ router.post(
                 url: `/images/listings/${req.file.filename}`
             };
         }
-
         const newListing = new Listing(listingData);
+        newListing.owner= req.user._id;
         await newListing.save();
         req.flash("success", "New Listing Created!");
         res.redirect("/listings");
