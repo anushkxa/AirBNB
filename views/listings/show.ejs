@@ -27,10 +27,12 @@
     <%}%>
 
     </div>
+
+    <% if(currUser) {%>
     <div class="col-8 offset-3 mb-3" style="justify-content: space-between;">
         <hr>
         <h4>Leave a Review</h4>
-        <form action="/listings/<%=listing.id%>/reviews"
+        <form action="/listings/<%=listing._id%>/reviews"
             method="POST"
             novalidate
             class="needs-validation">
@@ -45,8 +47,8 @@
             <div>
                 <textarea
                 name="review[comment]"
-                id="comment
-                "cols="30"
+                id="comment"
+                cols="30"
                 class="form-control"
                 required
                 rows="5"></textarea>
@@ -56,21 +58,26 @@
             </div>
             <button style="margin-top: 14px;"  class="btn btn-danger">Submit</button>
         </form>
+        <%}%>
+
         <hr>
         <h4>All Reviews</h4>
         <div class="row">
         <% for(review of listing.reviews) {%>
-            <div class="card col-5 ms-3 mb-3 "">
+            <div class="card col-5 ms-3 mb-3">
                 <div class="card-body">
-                    <h5 class=""card-title">Natahan</h5>
+                    <h5 class="card-title"><%=review.author ? review.author.username : 'Anonymous'%></h5>
                     <p class="card-text"><%= review.comment%></p>
                     <p class="card-text"><%= review.rating%> Stars </p>
                 </div>
-                <form class="mb-3" method="POST" action="/listing/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE">
+                <% if(review.author) { %>
+                <form class="mb-3" method="POST" action="/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE">
                     <button class="btn btn-sm btn-dark">Delete</button>
                 </form>
+                <% } %>
             </div>
         <% } %>
         </div>
     </div>
+    
 </div>

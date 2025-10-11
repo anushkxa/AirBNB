@@ -71,6 +71,19 @@ app.use("/", userRouter);
 
 
 
+// Multer error handling
+app.use((err, req, res, next) => {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+        req.flash("error", "File too large. Maximum size allowed is 5MB.");
+        return res.redirect("back");
+    }
+    if (err.message === 'Only image files are allowed!') {
+        req.flash("error", "Only image files are allowed!");
+        return res.redirect("back");
+    }
+    next(err);
+});
+
 app.use((err,req,res,next)=>{
     let {statusCode=500, message="Something went wrong"} = err;
     res.render("error.ejs",{message});

@@ -3,16 +3,19 @@ const router = express.Router();
 const multer = require("multer");
 const wrapAsync=require("../utils/wrapAsync.js");
 const Listing = require("../models/lisiting")
-const ExpressError = require("../utils/expressError.js");
 const validateListing = require("../utils/validateListing.js");
 const {isLoggedIn, isOwner}= require("../middleware.js");
 const { valid } = require("joi");
+const path = require("path");
 
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/images/listings/');
     },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
 });
 
 const upload = multer({
@@ -36,17 +39,23 @@ router.get("/new",isLoggedIn, (req,res)=>{
     res.render("listings/new.ejs");
 })
 
-//will show  all info of specific hotel hheehe
-router.get("/:id", async(req,res)=>{
-    let {id}= req.params;
-    const listing=await Listing.findById(id).populate("reviews").populate("owner");
-    if(!listing){
-        req.flash("error","Listing you requested for does not exist");
+//will show all info of specific listing
+router.get("/:id", async (req, res) => {
+    let { id } = req.params;
+    const listing = await Listing.findById(id)
+        .populate({
+            path: "reviews",
+            populate: {
+                path: "author"
+            }
+        })
+        .populate("owner");
+    if (!listing) {
+        req.flash("error", "Listing you requested for does not exist");
         return res.redirect("/listings");
     }
-    res.render("listings/show.ejs",{listing});
-
-})
+    res.render("listings/show.ejs", { listing });
+});
 
 router.post(
     "/",
