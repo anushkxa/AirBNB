@@ -16,12 +16,16 @@
             <p class="card-text"><%= listing.country %> </li></p>
         </div>
     </div>
+
+    <% if(currUser &&currUser._id.equals(listing.owner._id)) {%>
     <div class="btn" style="display: flex;flex-direction: row; justify-content: space-around;">
     <a  href="/listings/<%=listing._id%>/edit" class="btn btn-danger">Edit</a>
     <form method="post" action="/listings/<%=listing._id%>?_method=DELETE">
         <button class="btn btn-dark">Delete</button>
     </form>
     </div>
+    <%}%>
+
     </div>
     <div class="col-8 offset-3 mb-3" style="justify-content: space-between;">
         <hr>

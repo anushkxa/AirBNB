@@ -5,7 +5,7 @@ const wrapAsync=require("../utils/wrapAsync.js");
 const Listing = require("../models/lisiting")
 const ExpressError = require("../utils/expressError.js");
 const validateListing = require("../utils/validateListing.js");
-const {isLoggedIn}= require("../middleware.js");
+const {isLoggedIn, isOwner}= require("../middleware.js");
 const { valid } = require("joi");
 
 
@@ -71,7 +71,7 @@ router.post(
 );
 
 //edit
-router.get("/:id/edit",isLoggedIn, async(req,res)=>{
+router.get("/:id/edit",isLoggedIn,isOwner, async(req,res)=>{
     let {id}=req.params;
     const listing=await Listing.findById(id);
     if(!listing){
@@ -82,28 +82,24 @@ router.get("/:id/edit",isLoggedIn, async(req,res)=>{
 })
 
 //update vala route
-router.put("/:id",isLoggedIn,validateListing, upload.single('image'), async (req,res)=>{
-    try {
+router.put("/:id",isLoggedIn,
+    isOwner,
+    validateListing, upload.single('image'), async (req,res)=>{
         let{id}=req.params;
         const updateData = {...req.body.listing};
-
-        // If a new image was uploaded, update the image information
+        // If a new image was uploaded
         if (req.file) {
             updateData.image = {
                 filename: req.file.filename,
                 url: `/images/listings/${req.file.filename}`
             };
         }
-
         await Listing.findByIdAndUpdate(id, updateData);
         res.redirect(`/listings/${id}`);
-    } catch (error) {
-        console.error("Error updating listing:", error);
-        res.status(500).send("Error updating listing");
-    }
+
 });
 
-router.delete("/:id",isLoggedIn, async(req,res)=>{
+router.delete("/:id",isLoggedIn,isOwner, async(req,res)=>{
     let {id}=req.params;
     let deletedListing=await Listing.findByIdAndDelete(id);
     console.log("deleted");
