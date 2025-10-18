@@ -1,10 +1,10 @@
 <%layout("/layouts/boilerplate.ejs")  %>
 <body>
 <div class="row">
-    <div class="col-9 offset-2">
+    <div class="col-8 offset-3 mb-3">
 
     <h3><%= listing.title %></h3>
-    <div class="card listing-card col-6 offset-3 show-card">
+    <div class="card listing-card col-9 mb-3 offset-2 show-card">
         <img src="<%= listing.image && listing.image.url ? listing.image.url : '/images/listings/default.jpg' %>" class="card-img-top show-img" alt="listing_image">
         <div class="card-body">
             <p class="card-text">
@@ -76,8 +76,11 @@
         <%}%>
 
         <hr>
+        <% if(listing.reviews.length>0){%>
+        <div class="col-8 offset-3 mb-3">
         <h4>All Reviews</h4>
-        <div class="row">
+        </div>
+        <div class="row col-8 offset-3 mb-3">
         <% for(review of listing.reviews) {%>
             <div class="card col-5 ms-3 mb-3">
                 <div class="card-body">
@@ -94,6 +97,21 @@
             </div>
         <% } %>
         </div>
+        <%}%>
+        
     </div>
-    
+    <div class="col-8 offset-3 mb-3">
+            <h3>Where you'll be</h3>
+            <div id="map"></div>
+        </div>
 </div>
+<script>
+    // let mapToken = "<%= process.env.MAP_TOKEN %>";
+    // console.log(mapToken);
+    mapboxgl.accessToken = 'pk.eyJ1IjoiYW51c2hrYWNoYXVoYW4wODAyIiwiYSI6ImNtZ3V5dXJtMzBqbjUycW43OWIydGFkMmwifQ.NXEBGpEcViEmHc1dBLLuDQ';
+    const map = new mapboxgl.Map({
+        container: 'map', // container ID
+        center: [77.209,28.6139], // starting position [lng, lat]. Note that lat must be set between -90 and 90
+        zoom: 9 // starting zoom
+    });
+</script>

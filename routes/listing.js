@@ -52,7 +52,7 @@ router.get("/:id/edit",isLoggedIn,isOwner,
 //update vala route
 router.put("/:id",isLoggedIn,
     isOwner,
-    validateListing, upload.single('image'),
+    validateListing, upload.single("listing[image]"),
     wrapAsync(listingController.updateListing))
 
 router.delete("/:id",isLoggedIn,isOwner,

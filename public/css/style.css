@@ -80,3 +80,11 @@ show-img{
 height: 30vh;
 
 }
+
+
+/* Map */
+
+#map{
+    height: 400px;
+    width: 80vh;
+}

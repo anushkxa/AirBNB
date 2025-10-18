@@ -13,6 +13,11 @@
             <textarea name=listing[description] cols="120" class="form-control" required><%= listing.description %></textarea>
             <div class="invalid-feedback">Enter Valid description</div>
         </div>
+        
+        <div class="mb-3">
+            Original Listing Image<br>
+            <img src="<%= listing.image %>">
+        </div>
 
         <div class="mb-3">
             <label for="image" >Current Image:</label>
